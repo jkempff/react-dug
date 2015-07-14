@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>React DUG Slides</title>
+  <style type="text/css">
+    .remark-container {
+      line-height: 1.6;
+      color: #111;
+      background-color: #f3f3f3;
+      font-family: Helvetica Neue;
+    }
+    h1,h2,h3,h4,h5,h6 {
+      color: #0074D9;
+      text-align: center;
+    }
+
+    a {
+      color: #0074D9;
+    }
+
+    blockquote {
+      font-style: italic;
+      text-align: center;
+    }
+    blockquote p {
+      text-align: center;
+    }
+    .remark-slide-scaler {
+      box-shadow: none;
+    }
+    .remark-slide-content {
+      background: #f3f3f3;
+    }
+  </style>
+</head>
+<body>
+<textarea id="source">
+name: inverse
+layout: true
+class: inverse
+---
+class: middle
+# ReactJs Einführung
+
+---
+
+## Wer bin ich?
+
+* Julian Kempff
+* Frontend Entwickler bei Form & Code
+* Backend Erfahrungen (Drupal 7 / Silverstripe / Silex)
+
+---
+
+# Der Plan
+
+* Was ist React?
+* Was ist "JsX"?
+* Das Virtual DOM
+* Data Flow
+* Demos
+* "Separation of concerns"?
+* Serverseitiges Rendering
+* "In the wild"
+* Links
+
+---
+class: inverse
+
+# Was ist React?
+
+--
+class: center
+
+> "Das V in MVC"
+
+A Facebook & Instagram Collaboration
+
+---
+
+### React = JS Rendering-Engine
+
+--
+
+Alternative zu
+
+* Handlebars
+* Mustache JS
+* Backbone.View
+* Jade templates
+* etc..
+
+
+---
+class: center
+
+# Wie sieht das aus?
+
+--
+
+React Templates/Komponenten sind Javascript.
+
+---
+class:
+
+# Wie sieht das aus?
+
+```
+// Deklaration der "WelcomeMessage" Komponente
+var WelcomeMessage = React.createClass({
+  render: function () {
+    return (
+      <div>Hello {this.props.name}</div>
+    );
+  }
+});
+// Rendere die Komponente in das div#app
+React.render(<WelcomeMessage name="DUG" />,
+  document.getElementByID('app'));
+```
+
+..wird zu:
+
+```html
+<div>Hello DUG</div>
+```
+
+---
+class: middle
+
+# ..javascript?
+
+---
+class:
+
+# Was ist "JSX"?
+
+--
+
+JSX ist syntaktischer Zucker.
+
+```jsx
+..
+return <div>Hello {this.props.name}</div>;
+...
+```
+
+--
+
+verwandelt der JsXTransformer (oder babel.js) in echtes Javascript:
+
+```js
+..
+return React.createElement('div', null, 'Hello ', this.props.name);
+..
+```
+
+---
+
+# Warum JSX?
+
+--
+
+* Lesbarkeit
+
+--
+
+* nach dem Transfomieren handelt es sich um reines Javascript
+
+--
+
+* leichter Einstieg für neue Teammitglieder oder Mitarbeiter
+
+--
+
+* Spaß
+
+---
+
+# Wieso ist das gut?
+
+---
+
+## Virtual DOM
+
+--
+
+![Virtual DOM](images/virtual-dom.png)
+
+--
+
+Interaktionen und Manipulationen an React Komponenten werden erst im virtuellen DOM verarbeitet.
+
+--
+
+Das VD synchronisiert sich dann mit dem echten DOM, rendert nur Änderungen neu und sorgt somit für möglichst wenig echte DOM Manipulation.
+
+---
+class: middle, center
+
+# Data
+
+aka, wie bekomme ich da dymanische Inhalte rein?
+
+---
+class: inverse
+
+# Komponenten
+
+--
+
+* **Alles** ist eine React Komponente.
+* Komponenten sind verschachtelbar
+* Eigene Komponenten sind schnell gebaut
+
+---
+
+# Komponenten
+
+```js
+var App = React.createElement({
+  render: function () {
+    return (
+      <div>
+        <AppHeader />
+        <TodoList>
+          <TodoListItem>My todo</TodoListItem>
+          <TodoListItem>My second todo</TodoListItem>
+        </TodoList>
+        <AppFooter />
+      </div>
+    );
+  }
+});
+```
+
+---
+
+# Properties
+
+--
+
+..sind in das, was man in HTML unter Attributen kennt.
+
+```
+<div className="my-component" style="color: red;"></div>
+```
+
+--
+
+```
+var styles = {
+  color: 'red'
+};
+
+function clickHandler() {
+  ..
+}
+
+<div style={styles} onClick={clickHandler}></div>
+```
+
+---
+
+# Properties
+
+
+```
+var userData = {
+  name: 'Ju',
+  onUpdate: function () {..}
+};
+
+<Member name={userData.name} onUpdate={userData.onUpdate} />
+```
+
+--
+
+..oder mit ES6, das der JsXTransformer teilweise unterstützt:
+
+```js
+<Member { ...userData } />
+```
+
+---
+
+# Properties
+
+<a class="jsbin-embed" href="http://jsbin.com/wisuli/embed?js,output">JS Bin on jsbin.com</a>
+
+---
+
+
+## Wiederverwendbarkeit von Komponenten
+
+--
+
+```
+<div>
+  <MyButton label="Delete" onClick={onDeleteHandler} />
+  <MyButton label="Make sticky" onClick={onMakeStickyHandler} />
+</div>
+```
+
+---
+class: center
+
+# State
+
+--
+
+Ein State spiegelt nur *nicht persistente* Daten wieder.
+
+---
+class:
+
+# State
+
+Zum Beispiel:
+
+* Aktuell eingestellter Filter
+* Editierbarer Text (bevor er gespeichert wird)
+* Status einer Komponente ("loading", "email invalid")
+
+---
+
+# State
+
+Jede Komponente muss einen initialen State definieren:
+
+--
+
+```
+var MyComponent = React.createClass({
+  getInitialState: function () {
+    return {
+      waitingForAjaxResponse: true
+    };
+  }
+});
+```
+
+---
+
+```
+var Counter = React.createClass({
+  getInitialState: function () {
+    return {
+      count: 0
+    }
+  },
+  componentDidMount: function () {
+    setInterval(function () {
+      this.setState({
+        count: this.state.count + 1
+      });
+    }.bind(this), 1000);
+  },
+  render: function () {
+    return (
+      <div>
+        You have been { this.state.count } seconds here!
+      </div>
+    );
+  }
+});
+```
+
+---
+
+<a class="jsbin-embed" href="http://jsbin.com/cariqu/embed?js,output">JS Bin on jsbin.com</a>
+
+
+---
+
+# Data
+
+* **States**: sind komponenten-intern
+
+* **Properties**: werden einer Komponente "von außen" hereingereicht
+
+--
+
+* **Beide** sorgen bei Änderung für erneutes Rendering
+
+---
+
+# Demo
+
+---
+
+# HTML, Funktion (und Styles) in einer Datei?
+
+--
+
+Um z.B. einen "Loader Button" zu editieren, muss man *lediglich* die Datei "LoaderButton.js" finden.
+
+--
+
+Mit jQuery müsste man mindestens das Markup/Template suchen, das jQuery Plugin und den Ort, an dem das Plugin initialisiert wird.
+
+---
+
+# Serverseitiges Rendering
+
+--
+
+..am Beispiel derkonzert.
+
+--
+
+* Daten Backend, Simple JSON Schnittstelle: PHP/MySql
+
+--
+
+* Server liefert vollständiges Markup beim ersten Aufruf
+
+--
+
+* ReactJs "legt" sich über dieses Markup
+
+--
+
+* Ab jetzt wird nur noch im Browser gerendert
+
+--
+
+* No-Js Besucher bekommen eine voll-funktionsfähige Website/WebApp geliefert
+
+---
+
+# Wer nutzt React?
+
+* Facebook (mit react-native auch für native apps)
+* Netflix
+* Apple
+* Twitter
+* AirBnb
+
+*[Quelle, Stand 10.07.2015](https://www.youtube.com/watch?list=PLCC436JpVnK3HvUSAHpt-LRJkIK8pQG6R&v=Q6Kczrgw6ic)*
+
+---
+
+# Links
+
+Slides und Beispiele: github tbd
+
+Mehr erfahren:
+
+* [Offizielle Projekt Seite](https://facebook.github.io/react/)
+* [Youtube React Conf 2015](https://www.youtube.com/watch?v=KVZ-P-ZI6W4&list=PLb0IAmt7-GS1cbw4qonlQztYV1TAW0sCr)
+* [Youtube React Conf Europe 2015 1](https://www.youtube.com/watch?list=PLCC436JpVnK0Phxld2dD4tM4xPMxJCiRD&v=PAA9O4E1IM4)
+* [Youtube React Conf Europe 2015 2](https://www.youtube.com/watch?list=PLCC436JpVnK3HvUSAHpt-LRJkIK8pQG6R&v=OFuDvqZmUrE)
+
+</textarea>
+<script type="text/javascript" src="remark.latest.min.js"></script>
+<script>
+  var hljs = remark.highlighter.engine;
+</script>
+<script src="remark.language.js"></script>
+<script>
+var slideshow = remark.create({
+  highlightStyle: 'monokai',
+  highlightLanguage: 'remark',
+  navigation: {
+    scroll: false,
+    touch: false,
+    click: false
+  },
+}) ;
+</script>
+<script src="https://static.jsbin.com/js/embed.min.js?3.33.1"></script>
+</body>
+</html>
