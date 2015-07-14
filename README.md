@@ -11,5 +11,7 @@ npm install
 Start demo server
 
 ```
-./node_modules/gulp/bin/gulp.js watch
+npm start
 ```
+
+and visit http://localhost:8080
