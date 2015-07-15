@@ -32,6 +32,9 @@
     .remark-slide-content {
       background: #f3f3f3;
     }
+    .gray {
+      color: #9b9b9b;
+    }
   </style>
 </head>
 <body>
@@ -47,7 +50,7 @@ class: middle
 
 ## Wer bin ich?
 
-* Julian Kempff
+* Ju (Julian Kempff)
 * Frontend Entwickler bei Form & Code
 * Backend Erfahrungen (Drupal 7 / Silverstripe / Silex)
 
@@ -66,20 +69,40 @@ class: middle
 * Links
 
 ---
+
+# Der Plan
+
+* Was ist React?
+<li class="gray">Was ist "JsX"?</li>
+<li class="gray">Das Virtual DOM</li>
+<li class="gray">Data Flow</li>
+* Demos
+<li class="gray">"Separation of concerns"?</li>
+<li class="gray">Serverseitiges Rendering</li>
+<li class="gray">"In the wild"</li>
+* Links
+
+---
 class: inverse
 
 # Was ist React?
 
 --
-class: center
 
 > "Das V in MVC"
 
-A Facebook & Instagram Collaboration
+--
+
+**Daten / Fakten:**
+
+* Facebook & Instagram Kollaboration
+* veröffentlicht im Mai 2013
+* 4800 commits
+* 461 contributers
 
 ---
 
-### React = JS Rendering-Engine
+### React = JS View-Engine
 
 --
 
@@ -90,7 +113,6 @@ Alternative zu
 * Backbone.View
 * Jade templates
 * etc..
-
 
 ---
 class: center
@@ -166,11 +188,15 @@ return React.createElement('div', null, 'Hello ', this.props.name);
 
 --
 
-* nach dem Transfomieren handelt es sich um reines Javascript
+* Struktur
 
 --
 
-* leichter Einstieg für neue Teammitglieder oder Mitarbeiter
+* Reines Javascript (nach dem Transfomieren)
+
+--
+
+* Leichter Einstieg
 
 --
 
@@ -376,7 +402,7 @@ var Counter = React.createClass({
 
 # Data
 
-* **States**: sind komponenten-intern
+* **States**: sind komponenten-intern und *nicht persistent*
 
 * **Properties**: werden einer Komponente "von außen" hereingereicht
 
@@ -390,7 +416,9 @@ var Counter = React.createClass({
 
 ---
 
-# HTML, Funktion (und Styles) in einer Datei?
+# Separation of concerns
+
+HTML, Funktion (und Styles) in einer Datei?
 
 --
 
@@ -410,11 +438,11 @@ Mit jQuery müsste man mindestens das Markup/Template suchen, das jQuery Plugin 
 
 --
 
-* Daten Backend, Simple JSON Schnittstelle: PHP/MySql
+* PHP/MySql Daten Backend, Simple JSON Schnittstelle
 
 --
 
-* Server liefert vollständiges Markup beim ersten Aufruf
+* NodeJs Server liefert vollständiges Markup beim ersten HTTP-Aufruf
 
 --
 
@@ -427,6 +455,10 @@ Mit jQuery müsste man mindestens das Markup/Template suchen, das jQuery Plugin 
 --
 
 * No-Js Besucher bekommen eine voll-funktionsfähige Website/WebApp geliefert
+
+--
+
+* Zusätzlicher Aufwand: ca. 100 Zeilen JS für server-/client spezifische Dinge
 
 ---
 
@@ -444,7 +476,8 @@ Mit jQuery müsste man mindestens das Markup/Template suchen, das jQuery Plugin 
 
 # Links
 
-[Slides und Beispiele](https://github.com/jkempff/react-dug)
+* Slides und Beispiele: [https://github.com/jkempff/react-dug](https://github.com/jkempff/react-dug)
+* [Schnell mal ausprobieren auf jsbin: http://jsbin.com/luwele/edit?js,output](http://jsbin.com/luwele/edit?js,output)
 
 Mehr erfahren:
 
